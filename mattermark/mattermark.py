@@ -93,7 +93,7 @@ class mattermark:
     # Returns a list of 20 most similar companies
     #
     def similarCompanies(self, companyID):
-        company_url = self.COMPANIES_URL + "/" + companyID + "/similar"
+        company_url = self.COMPANIES_URL + "/" + str(companyID) + "/similar"
         payload = {"key": self.api_key}
         result = requests.get(company_url, payload)
         self.queries += 1
@@ -103,7 +103,7 @@ class mattermark:
     # Returns a dictionary of important people at the company
     #
     def companyPersonnel(self, companyID):
-        company_url = self.COMPANIES_URL + "/" + companyID + "/people"
+        company_url = self.COMPANIES_URL + "/" + str(companyID) + "/people"
         payload = {"key": self.api_key}
         result = requests.get(company_url, payload)
         self.queries += 1
@@ -112,21 +112,18 @@ class mattermark:
     #
     # Gets all of the funding events from a certain day
     #
-    def fundingEvents(self, date=None, Pages=1):
+    def fundingEvents(self, Pages=1):
         funding_list = []
-        # If the date is None, then we get the events from today
-        if(date != None):
-            payload = {"key": self.api_key, "date": str(date)}
-        else:
-            payload = {"key": self.api_key}
-        results_p1 = requests.get(self.FUNDING_URL, payload)
+        payload = {"key": self.api_key}
+        result = requests.get(self.FUNDING_URL, payload)
         self.queries += 1
+        results_p1 = result.json()
         # Add the fundings to a master list
         for funding in results_p1["fundings"]:
             funding_list.append(funding)
         # Deal with paging
         if(results_p1["meta"]["total_pages"] > 1 and Pages > 1):
-            if(Pages < results_p1["meta"]["total_pages"]):
+            if(Pages > results_p1["meta"]["total_pages"]):
                 Pages = results_p1["meta"]["total_pages"]
             for i in range(2, Pages+1):
                 payload["page"] = i
