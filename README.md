@@ -17,7 +17,7 @@ To use the API start by creating a new mattermark instance
 
 ```python
 import mattermark
-mm = mattermark("<my api key>")
+mm = mattermark.mattermark("<my api key>")
 ```
 
 It then becomes simple to search for companies and investors, extract company details, get an investor's portfolio, identify key company personnel, and get relevant company news. Each method returns a dictionary that is identical to the JSON returned by the API, and for endpoints that support paging, we give you the option of grabbing multiple pages at once.
@@ -90,7 +90,7 @@ MM_API_KEY: <Your API Key>
 ```
 
 Then you can use the PyYAML package to get the key any time you want to use it:
-  
+
 ```python
 config_file = open(".config.yml")
 config_dict = yaml.safe_load(config_file)
