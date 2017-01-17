@@ -30,7 +30,7 @@ class mattermark:
     #
     # Searches for a company and returns a dictionary of results
     #
-    def companySearch(self, company, Paging=True):
+    def companySearch(self, company):
         payload = {"key": self.api_key, "term": company, "object_types": "company"}
         result = requests.get(self.SEARCH_URL, payload)
         self.queries += 1
@@ -46,10 +46,10 @@ class mattermark:
         return result.json()
 
     #
-    # Returns a dictionary of details about a company given the identifier
+    # Returns a dictionary of details about a company given the ID
     #
-    def companyDetails(self, identifier):
-        company_url = self.COMPANIES_URL + "/" + identifier
+    def companyDetails(self, companyID):
+        company_url = self.COMPANIES_URL + "/" + str(companyID)
         payload = {"key": self.api_key}
         result = requests.get(company_url, payload)
         self.queries += 1
@@ -58,8 +58,8 @@ class mattermark:
     #
     # Returns a dictionary of news stories about a company
     #
-    def companyNews(self, identifier):
-        company_url = self.COMPANIES_URL + "/" + str(identifier) + "/stories"
+    def companyNews(self, companyID):
+        company_url = self.COMPANIES_URL + "/" + str(companyID) + "/stories"
         payload = {"key": self.api_key}
         result = requests.get(company_url, payload)
         self.queries += 1
@@ -68,8 +68,8 @@ class mattermark:
     #
     # Returns a list of similar companies
     #
-    def similarCompanies(self, identifier):
-        company_url = self.COMPANIES_URL + "/" + identifier + "/similar"
+    def similarCompanies(self, companyID):
+        company_url = self.COMPANIES_URL + "/" + companyID + "/similar"
         payload = {"key": self.api_key}
         result = requests.get(company_url, payload)
         self.queries += 1
@@ -78,8 +78,8 @@ class mattermark:
     #
     # Returns a dictionary of important people at the company
     #
-    def companyPersonnel(self, identifier):
-        company_url = self.COMPANIES_URL + "/" + identifier + "/people"
+    def companyPersonnel(self, companyID):
+        company_url = self.COMPANIES_URL + "/" + companyID + "/people"
         payload = {"key": self.api_key}
         result = requests.get(company_url, payload)
         self.queries += 1
