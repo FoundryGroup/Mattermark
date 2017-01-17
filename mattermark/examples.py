@@ -55,6 +55,10 @@ print(mattermark_details["mattermark_score"])
 key_people = mm.companyPersonnel(mmID)
 pp.pprint(key_people)
 
+# Get the articles about them
+news = mm.companyNews(mmID)
+pp.pprint(news)
+
 # And similar companies
 mm_similar_companies = mm.similarCompanies(mmID)
 pp.pprint(mm_similar_companies)
