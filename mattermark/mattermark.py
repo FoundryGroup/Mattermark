@@ -13,7 +13,6 @@ class mattermark:
     INVESTOR_URL = "https://api.mattermark.com/investors"
     SEARCH_URL = "https://api.mattermark.com/search"
     FUNDING_URL = "https://api.mattermark.com/fundings"
-    QUERIES_URL = "https://api.mattermark.com/queries"
     queries = 0
 
     #
