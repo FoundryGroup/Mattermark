@@ -46,6 +46,31 @@ class mattermark:
         return result.json()
 
     #
+    # Returns a list of companies that match the given parameters
+    #
+    def companiesList(self, parameters, Pages=1):
+        company_list = []
+        parameters["key"] = self.api_key
+        result = requests.get(self.COMPANIES_URL, parameters)
+        self.queries += 1
+        results_p1 = result.json()
+        # Add companies to master list
+        for company in results_p1["companies"]:
+            company_list.append(company)
+        # Deal with paging if specified
+        if(results_p1["meta"]["total_pages"] > 1 and Pages > 1):
+            if(Pages < results_p1["meta"]["total_pages"]):
+                Pages = results_p1["meta"]["total_pages"]
+            for i in range(2, Pages+1):
+                parameters["page"] = i
+                result = requests.get(self.COMPANIES_URL, parameters)
+                self.queries += 1
+                results = result.json()
+                for company in results["companies"]:
+                    funding_list.append(company)
+        return company_list
+
+    #
     # Returns a dictionary of details about a company given the ID
     #
     def companyDetails(self, companyID):
@@ -66,7 +91,7 @@ class mattermark:
         return result.json()
 
     #
-    # Returns a list of similar companies
+    # Returns a list of 20 most similar companies
     #
     def similarCompanies(self, companyID):
         company_url = self.COMPANIES_URL + "/" + companyID + "/similar"
@@ -97,18 +122,20 @@ class mattermark:
             payload = {"key": self.api_key}
         results_p1 = requests.get(self.FUNDING_URL, payload)
         self.queries += 1
+        # Add the fundings to a master list
         for funding in results_p1["fundings"]:
             funding_list.append(funding)
+        # Deal with paging
         if(results_p1["meta"]["total_pages"] > 1 and Pages > 1):
             if(Pages < results_p1["meta"]["total_pages"]):
-                Pages = int(results_p1["meta"]["total_pages"])
+                Pages = results_p1["meta"]["total_pages"]
             for i in range(2, Pages+1):
                 payload["page"] = i
                 result = requests.get(self.FUNDING_URL, payload)
                 self.queries += 1
                 results = result.json()
                 for funding in results["fundings"]:
-                    funding_list.append(company)
+                    funding_list.append(funding)
         return funding_list
 
     #
