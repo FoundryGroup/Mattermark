@@ -3,22 +3,23 @@
 #
 # Author: Carl Cortright
 # Date: 10/27/2016
+# Updated: 1/16/2017
 #
 ################################################################################
 import requests
 
 class mattermark:
-    # Constants
     COMPANIES_URL = "https://api.mattermark.com/companies"
     INVESTOR_URL = "https://api.mattermark.com/investors"
     SEARCH_URL = "https://api.mattermark.com/search"
+    FUNDING_URL = "https://api.mattermark.com/fundings"
+    QUERIES_URL = "https://api.mattermark.com/queries"
 
     #
     # Initialization function
     #
-    def __init__(self, api_key, verbose=False):
+    def __init__(self, api_key):
         self.api_key = api_key
-        self.verbose = verbose
         payload = {"key": self.api_key}
         if(requests.get(self.COMPANIES_URL, payload).status_code == 403):
             raise ValueError("Invalid API key")
@@ -27,10 +28,20 @@ class mattermark:
     # Searches for a company and returns a dictionary of results
     #
     def companySearch(self, company):
-        payload = {"key": self.api_key, "term": company}
+        payload = {"key": self.api_key, "term": company, "object_types": "company"}
         result = requests.get(self.SEARCH_URL, payload)
+        # TODO: Add paging
         return result.json()
 
+    #
+    # Searches for an investor and returns a dictionary of results
+    #
+    def investorSearch(self, investor):
+        payload = {"key": self.api_key, "term": investor, "object_types": "investor"}
+        result = requests.get(self.SEARCH_URL, payload)
+        # TODO: Add Paging
+        return result.json()
+    
     #
     # Returns a dictionary of details about a company
     #
