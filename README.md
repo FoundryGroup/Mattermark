@@ -82,14 +82,14 @@ To learn more about the different parameters for the company list endpoint pleas
 
 ## Recommended Key Storage
 
-It is recommended that you store your API key in either a config file or as a system variable, and only read it when you need to create a new mattermark object. An example would be to create a new entry in your projects config.yml file, making sure this file stays untracked by version control:
+It is recommended that you store your API key in either a config file or as a system variable, and only read it when you need to create a new mattermark object. An example would be to create a new entry in your projects config.yml file, making sure this file stays untracked by version control.
 
 ```YAML
 MM_API_KEY: <Your API Key>
 
 ```
 
-Then you can use the PyYAML package to get the key any time you want to use it:
+Then you can use the PyYAML package to get the key any time you want to use it.
   
 ```python
 config_file = open(".config.yml")
