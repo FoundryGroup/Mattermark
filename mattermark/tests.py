@@ -34,7 +34,7 @@ class TestMattermark(unittest.TestCase):
 
     def test_investor_portfolio(self):
         portfolio = self.mm.investorPortfolio(38)
-        self.assertEqual(len(portfolio), 119)
+        self.assertEqual(len(portfolio), 118)
 
     def test_investor_details(self):
         foundry_details = self.mm.investorDetails(38)
@@ -59,6 +59,14 @@ class TestMattermark(unittest.TestCase):
     def test_similar_companies(self):
         mm_similar_companies = self.mm.similarCompanies(146589)
         self.assertEqual(mm_similar_companies[0]["company_name"], "ITjuzi")
+
+    def test_companyBussinessNamebyDomain(self):
+        mm_companyBussinessNamebyDomain = self.mm.companyBussinessNamebyDomain("facebook.com")
+        self.assertEqual(mm_companyBussinessNamebyDomain['companies'][0]["id"], "163595")
+
+    def test_companyBussinessNamebyName(self):
+        mm_companyBussinessNamebyName = self.mm.companyBussinessNamebyName("facebook")
+        self.assertEqual(mm_companyBussinessNamebyName['companies'][0]["id"], "163595")
 
 
 #
