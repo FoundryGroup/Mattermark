@@ -9,7 +9,7 @@ from distutils.core import setup
 setup(
   name = 'mattermark',
   packages = ['mattermark'],
-  version = '0.2',
+  version = '0.4.1',
   description = 'Wrapper for the Mattermark API',
   author = 'Carl Cortright',
   author_email = 'carl@foundrygroup.com',

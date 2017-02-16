@@ -6,4 +6,4 @@
 #
 ################################################################################
 
-from mattermark import mattermark
+from mattermark.mattermark import mattermark
