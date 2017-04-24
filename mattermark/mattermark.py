@@ -21,7 +21,7 @@ class mattermark:
     def __init__(self, api_key):
         self.api_key = api_key
         payload = {"key": self.api_key}
-        if(requests.get(self.COMPANIES_URL, payload).status_code == 403):
+        if(requests.get(self.COMPANIES_URL, params=payload).status_code == 403):
             raise ValueError("Invalid API key")
         else:
             self.queries += 1
@@ -31,7 +31,7 @@ class mattermark:
     #
     def companySearch(self, company):
         payload = {"key": self.api_key, "term": company, "object_types": "company"}
-        result = requests.get(self.SEARCH_URL, payload)
+        result = requests.get(self.SEARCH_URL, params=payload)
         self.queries += 1
         return result.json()
 
@@ -40,7 +40,7 @@ class mattermark:
     #
     def investorSearch(self, investor):
         payload = {"key": self.api_key, "term": investor, "object_types": "investor"}
-        result = requests.get(self.SEARCH_URL, payload)
+        result = requests.get(self.SEARCH_URL, params=payload)
         self.queries += 1
         return result.json()
 
@@ -50,7 +50,7 @@ class mattermark:
     def companiesList(self, parameters, Pages=1):
         company_list = []
         parameters["key"] = self.api_key
-        result = requests.get(self.COMPANIES_URL, parameters)
+        result = requests.get(self.COMPANIES_URL, params=parameters)
         self.queries += 1
         results_p1 = result.json()
         # Add companies to master list
@@ -62,12 +62,34 @@ class mattermark:
                 Pages = results_p1["meta"]["total_pages"]
             for i in range(2, Pages+1):
                 parameters["page"] = i
-                result = requests.get(self.COMPANIES_URL, parameters)
+                result = requests.get(self.COMPANIES_URL, params=parameters)
                 self.queries += 1
                 results = result.json()
                 for company in results["companies"]:
-                    funding_list.append(company)
+                    company_list.append(company)
         return company_list
+
+    #
+    # Returns a dictionary of basic mattermark metadata for a list company by domain
+    # 'https://api.mattermark.com/companies/?key=[YOUR KEY]&domain=facebook.com'
+    #
+    def companyBussinessNamebyDomain(self, domain):
+        company_url = self.COMPANIES_URL
+        payload = {"key": self.api_key, "domain": domain}
+        result = requests.get(company_url, params=payload)
+        self.queries += 1
+        return result.json()
+
+    #
+    # Returns a dictionary of basic mattermark metadata for a list company by company name
+    # 'https://api.mattermark.com/companies/?key=[YOUR KEY]&company_name=facebook'
+    #
+    def companyBussinessNamebyName(self, company_name):
+        company_url = self.COMPANIES_URL
+        payload = {"key": self.api_key, "company_name": company_name}
+        result = requests.get(company_url, params=payload)
+        self.queries += 1
+        return result.json()
 
     #
     # Returns a dictionary of details about a company given the ID
@@ -75,7 +97,7 @@ class mattermark:
     def companyDetails(self, companyID):
         company_url = self.COMPANIES_URL + "/" + str(companyID)
         payload = {"key": self.api_key}
-        result = requests.get(company_url, payload)
+        result = requests.get(company_url, params=payload)
         self.queries += 1
         return result.json()
 
@@ -85,7 +107,7 @@ class mattermark:
     def companyNews(self, companyID):
         company_url = self.COMPANIES_URL + "/" + str(companyID) + "/stories"
         payload = {"key": self.api_key}
-        result = requests.get(company_url, payload)
+        result = requests.get(company_url, params=payload)
         self.queries += 1
         return result.json()
 
@@ -95,7 +117,7 @@ class mattermark:
     def similarCompanies(self, companyID):
         company_url = self.COMPANIES_URL + "/" + str(companyID) + "/similar"
         payload = {"key": self.api_key}
-        result = requests.get(company_url, payload)
+        result = requests.get(company_url, params=payload)
         self.queries += 1
         return result.json()
 
@@ -105,7 +127,7 @@ class mattermark:
     def companyPersonnel(self, companyID):
         company_url = self.COMPANIES_URL + "/" + str(companyID) + "/people"
         payload = {"key": self.api_key}
-        result = requests.get(company_url, payload)
+        result = requests.get(company_url, params=payload)
         self.queries += 1
         return result.json()
 
@@ -115,7 +137,7 @@ class mattermark:
     def fundingEvents(self, Pages=1):
         funding_list = []
         payload = {"key": self.api_key}
-        result = requests.get(self.FUNDING_URL, payload)
+        result = requests.get(self.FUNDING_URL, params=payload)
         self.queries += 1
         results_p1 = result.json()
         # Add the fundings to a master list
@@ -127,7 +149,7 @@ class mattermark:
                 Pages = results_p1["meta"]["total_pages"]
             for i in range(2, Pages+1):
                 payload["page"] = i
-                result = requests.get(self.FUNDING_URL, payload)
+                result = requests.get(self.FUNDING_URL, params=payload)
                 self.queries += 1
                 results = result.json()
                 for funding in results["fundings"]:
@@ -140,7 +162,7 @@ class mattermark:
     def investorDetails(self, investorID):
         investor_url = self.INVESTOR_URL + "/" + str(investorID)
         payload = {"key": self.api_key}
-        result = requests.get(investor_url, payload)
+        result = requests.get(investor_url, params=payload)
         self.queries += 1
         return result.json()
 
@@ -151,7 +173,7 @@ class mattermark:
         company_list = []
         url = self.INVESTOR_URL + "/" + str(investorID) + "/portfolio"
         payload = {"key": self.api_key}
-        result = requests.get(url, payload)
+        result = requests.get(url, params=payload)
         self.queries += 1
         results_p1 = result.json()
         # Add each company to the list
@@ -161,7 +183,7 @@ class mattermark:
         if(results_p1["meta"]["total_pages"] > 1 and Paging == True):
             for i in range(2, results_p1["meta"]["total_pages"]+1):
                 payload = {"key": self.api_key, "page": i}
-                result = requests.get(url, payload)
+                result = requests.get(url, params=payload)
                 self.queries += 1
                 results = result.json()
                 for company in results["companies"]:

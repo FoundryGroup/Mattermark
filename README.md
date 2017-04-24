@@ -53,6 +53,14 @@ The companies endpoint makes it easy to get information about a specific company
 
 ```python
 
+# Get the list of Mattermark metadata by company name
+mm_companyname = mm.companyBussinessNamebyName("mattermark")
+mmID = mm_companyname['companies'][0]["id"]
+
+# Get the list of Mattermark metadata by domain
+mm_companyname = mm.companyBussinessNamebyName("mattermark.com")
+mmID = mm_companyname['companies'][0]["id"]
+
 # Search for "mattermark" in the company database
 mattermark_search = mm.companySearch("mattermark")
 mmID = mattermark_search[0]["object_id"]
